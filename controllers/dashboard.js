@@ -194,7 +194,7 @@ const uploadPostImage = (req, res, next) => {
 }
 
 const deletePostImage = (req, res) => {
-    req.body.forEach(url => {
+    req.body.deleted.forEach(url => {
         try {
             fs.unlinkSync(path.join(process.cwd(), 'public', url));
         } catch (err) {
@@ -216,10 +216,22 @@ const uploadPost = (req, res, next) => {
         req.body.postedBy = req.session.blogger._id
         new Article(req.body).save(err => {
             if (err) {
-                return redirect(res, '/dashboard/newPost', 'Title and description are required.')
+                return redirect(res, '/dashboard/newPost', 'Something went wrong.')
             }
             return res.redirect('/dashboard/myPosts');
         })
+    })
+}
+
+const saveUpdatePost = (req, res, next) => {
+    if (!req.body.title || !req.body.description) {
+        return redirect(res, '/dashboard/updatePost', 'Title and description are required.')
+    }
+    Article.findByIdAndUpdate(req.body.articleId, req.body, (err) => {
+        if (err) {
+            redirect(res, '/dashboard/updatePost', 'Something went wrong.')
+        }
+        res.redirect('/dashboard/myPosts')
     })
 }
 
@@ -258,6 +270,7 @@ module.exports = {
     logout,
     uploadAvatar,
     uploadPost,
+    saveUpdatePost,
     uploadPostImage,
     deletePostImage,
     deletePost

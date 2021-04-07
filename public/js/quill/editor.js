@@ -22,11 +22,11 @@ $(document).ready(function() {
 
     quill.on('text-change', (delta, oldContents, source) => {
         const deleted = getImgUrls(quill.getContents().diff(oldContents));
-        deleted.length && console.log('delete', typeof deleted)
+        deleted.length && console.log('delete', deleted)
         if (deleted.length) {
             fetch('/dashboard/deletePostImage', {
                 method: 'POST',
-                body: JSON.stringify(deleted),
+                body: JSON.stringify({ deleted }),
                 headers: { // ***
                     "Content-Type": "application/json" // ***
                 }
@@ -49,19 +49,6 @@ $(document).ready(function() {
             }
             return false;
         }
-
-        // if(flag) {
-        //     const formData = new FormData();
-        //     formData.append('title', $('#title').val());
-        //     formData.append('description', $('#description').val());
-        //     formData.append('content', $('#content').val());
-        //     formData.append('htmlContent', $('#htmlContent').val());
-        //     // formData.append('postHeaderImage', $('#postHeaderImage')[0].files[0], $('#postHeaderImage')[0].files[0].name);
-        //     fetch('/dashboard/uploadPost', {
-        //         method: 'POST',
-        //         body: formData
-        //     })
-        // }
     });
 
     function getImgUrls(delta) {

@@ -40,8 +40,9 @@ router.post('/update', dashboardController.updateBlogger);
 
 router.post('/uploadAvatar', dashboardController.uploadAvatar);
 
-router.post('/uploadPost',
-    dashboardController.uploadPost);
+router.post('/uploadPost', dashboardController.uploadPost);
+
+router.post('/saveUpdatePost', dashboardController.saveUpdatePost);
 
 router.post('/uploadPostImage', dashboardController.uploadPostImage);
 

@@ -37,10 +37,6 @@ $(document).ready(function() {
     });
 })
 
-function _update(articleId) {
-    // window.location.href = 
-}
-
 function _delete(articleId) {
     let ok = confirm("Are you sure?");
     if(ok) {
