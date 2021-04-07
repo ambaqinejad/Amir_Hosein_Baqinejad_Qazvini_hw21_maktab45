@@ -1,14 +1,14 @@
 let quill;
 $(document).ready(function() {
-
             quill = new Quill("#editor_viewer", {
                 theme: "bubble"
             });
             quill.disable();
 
+            let bloggerId = $("#bloggerId").html().trim();
+
             let articleID = window.location.href.split("/");
             articleID = articleID[articleID.length - 1];
-            console.log(articleID);
             $.ajax({
                         type: "post",
                         url: "/dashboard/getArticle",
@@ -21,10 +21,40 @@ $(document).ready(function() {
                 <p class="mb-4"><strong>Writer Email:</strong> ${article.article.postedBy.email}</p>
                 <p><strong>Created at:</strong> ${article.article.createdAt.substring(0, 10)}</p>
             `
-            $('#writerInfo').html(writerInfo);
+            $('#writerInfo').html(writerInfo)
+
+            if(article.article.postedBy._id === bloggerId) {
+                let modifyingPart = `
+                    <a id="updatePostBtn" href="/dashboard/updatePost?articleId=${article.article._id}" class="btn btn-primary">Update</a>
+                    <button type="button" id="deletePostBtn" onclick="_delete('${article.article._id}')" class="btn btn-danger">Delete</button>
+                `
+                $('#modifyingPart').html(modifyingPart);
+            }
         },
         error: function(err) {
-
+            $('#error').text(err)
         }
     });
 })
+
+function _update(articleId) {
+    // window.location.href = 
+}
+
+function _delete(articleId) {
+    let ok = confirm("Are you sure?");
+    if(ok) {
+        fetch('/dashboard/deletePost', {
+            method: 'DELETE',
+            body: JSON.stringify({articleId}),
+            headers: {'Content-Type': 'application/json'}
+        })
+        .then(response => response.json())
+        .then(response => {
+            window.location.href = document.referrer;
+        })
+        .catch(err => {
+            $('#error').text(err.message)
+        })
+    }
+}

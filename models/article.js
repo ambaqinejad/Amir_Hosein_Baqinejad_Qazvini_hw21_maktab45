@@ -25,4 +25,8 @@ const articleSchema = new Schema({
     }
 })
 
+// articleSchema.post('deleteOne', function(doc) {
+//     console.log(doc);
+// })
+
 module.exports = mongoose.model('Article', articleSchema);

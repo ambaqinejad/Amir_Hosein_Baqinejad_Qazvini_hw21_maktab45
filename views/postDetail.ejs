@@ -28,14 +28,16 @@
         <%- include('./partials/sidenav.ejs', {
             blogger
         }) %>
-
+            <h2 class="d-none" id="bloggerId">
+                <%= blogger._id %>
+            </h2>
             <main class="p-1">
                 <div class="row justify-content-center">
                     <div class="col-sm-12 col-md-8 col-lg-6">
                         <div id="editor_viewer"></div>
-                        <div id="writerInfo">
-
-                        </div>
+                        <div id="writerInfo"></div>
+                        <div id="modifyingPart"></div>
+                        <p id="error" class="text-danger"></p>
                     </div>
                 </div>
             </main>

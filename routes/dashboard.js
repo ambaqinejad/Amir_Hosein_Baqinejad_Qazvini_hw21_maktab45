@@ -19,6 +19,8 @@ router.get('/myPosts', dashboardController.getMyPostsPage);
 
 router.get('/newPost', dashboardController.getNewPostPage);
 
+router.get('/updatePost', dashboardController.getUpdatePostPage);
+
 router.get('/whoAmI', dashboardController.getWhoAmIPage);
 
 router.get('/modifyInformation',
@@ -44,5 +46,7 @@ router.post('/uploadPost',
 router.post('/uploadPostImage', dashboardController.uploadPostImage);
 
 router.post('/deletePostImage', dashboardController.deletePostImage);
+
+router.delete('/deletePost', dashboardController.deletePost);
 
 module.exports = router;

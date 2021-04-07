@@ -25,7 +25,6 @@ const getDashboardPage = (req, res, next) => {
                 detailError: ""
             });
         }
-        console.log(articles);
         res.render('dashboard.ejs', {
             err: '',
             blogger: req.session.blogger,
@@ -60,6 +59,13 @@ const getMyPostsPage = (req, res, next) => {
 
 const getNewPostPage = (req, res, next) => {
     res.render('newPost.ejs', {
+        blogger: req.session.blogger,
+        message: req.query.message || ''
+    })
+}
+
+const getUpdatePostPage = (req, res, next) => {
+    res.render('updatePost.ejs', {
         blogger: req.session.blogger,
         message: req.query.message || ''
     })
@@ -217,10 +223,33 @@ const uploadPost = (req, res, next) => {
     })
 }
 
+const deletePost = async(req, res, next) => {
+    const articleId = req.body.articleId;
+    try {
+        let deletedArticle = await Article.findById(articleId);
+        let deleteInfo = await Article.findByIdAndDelete(articleId);
+        fs.unlinkSync(path.join(process.cwd(), 'public', 'images', 'post_header_image', deletedArticle.image))
+        const contents = JSON.parse(deletedArticle.content);
+        contents.ops.forEach(content => {
+            if (content.insert.image) {
+                fs.unlinkSync(path.join(process.cwd(), 'public', content.insert.image))
+            }
+        })
+        return res.json({
+            message: 'Deleted successfully.'
+        })
+    } catch (err) {
+        return res.status(500).json({
+            message: err.message
+        })
+    }
+}
+
 module.exports = {
     getDashboardPage,
     getMyPostsPage,
     getNewPostPage,
+    getUpdatePostPage,
     getWhoAmIPage,
     getModifyInformationPage,
     getDetailPage,
@@ -230,5 +259,6 @@ module.exports = {
     uploadAvatar,
     uploadPost,
     uploadPostImage,
-    deletePostImage
+    deletePostImage,
+    deletePost
 }
